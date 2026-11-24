@@ -507,3 +507,31 @@ You should see the following output:
 ```
 
 The code we have generated also works for single digit numbers and double digit numbers as well. No need to implement code to handle them.
+
+## Four Digit Numbers
+
+The current code in `main.go` works for 1-digit, 2-digit, and 3-digit numbers. For others it won't work. 
+
+In the case of a 4-digit number, we need to account for the fourth digit. But more importantly, we hope to draw out a pattern that can work for any number of digits (at most 10 since this is an integer).
+
+The process for a 4-digit number is similar to a 3-digit number, except we have to extract one more digit.
+
+```go
+var digit1 int = num % 10 // 7859 % 10 = 9
+var temp1 int = num / 10 // 7859 / 10 = 785
+var digit2 int = temp1 % 10 // 785 % 10 = 5
+var temp2 int = temp1 / 10 // 785 / 10 = 78
+var digit3 int = temp2 % 10 // 78 % 10 = 8
+var digit4 int = temp2 / 10 // 78 / 10 = 7
+```
+
+The temporary variables `temp1` and `temp2` are there to hold the results of dividing by 10. `temp1` becomes a 3-digit number and `temp2` is a 2-digit number.
+
+Once all the digits are extracted, then sum them
+```go
+var sum int = digit1 + digit2 + digit3 + digit4
+```
+
+```
+7859 --> 7 + 8 + 5 + 9 --> 29, 29 --> 2 + 9 --> 11, 11 --> 1 + 1 --> 2
+```
