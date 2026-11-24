@@ -3,63 +3,21 @@ package main
 import "fmt"
 
 func addDigits(num int) int {
-    var a int = num % 10 // 1st Digit
+    var digit1 int = num % 10
+    var digit2 int = num / 10
 
-    var b int = num / 10
-    var c int = b % 10
-    a = a + c // 2nd
+    var sum int = digit1 + digit2
+    if sum > 9 {
+        digit1 = sum % 10
+        digit2 = sum / 10
 
-    b = b / 10
-    c = b % 10
-    a = a + c // 3rd
-
-    b = b / 10
-    c = b % 10
-    a = a + c // 4th
-
-    b = b / 10
-    c = b % 10
-    a = a + c // 5th
-
-    b = b / 10
-    c = b % 10
-    a = a + c // 6th
-
-    b = b / 10
-    c = b % 10
-    a = a + c // 7th
-
-    b = b / 10
-    c = b % 10
-    a = a + c // 8th
-
-    b = b / 10
-    c = b % 10
-    a = a + c // 9th
-
-    b = b / 10
-    c = b % 10
-    a = a + c // 10th
-
-    if a > 9 {
-        b = a / 10
-        a = a % 10
-        c = b % 10
-        a = a + c
+        sum = digit1 + digit2
     }
 
-    if a > 9 {
-        b = a / 10
-        a = a % 10
-        c = b % 10
-        a = a + c
-    }
-
-    return a
+    return sum
 }
 
 func main() {
-    fmt.Println(addDigits(1699999999))
-    fmt.Println(addDigits(67321))
-    fmt.Println(addDigits(9))
+    fmt.Println(addDigits(0))
+    fmt.Println(addDigits(38))
 }
