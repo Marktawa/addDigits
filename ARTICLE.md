@@ -363,3 +363,147 @@ You should see the following output:
 - `digit2` is the first digit
 - `sum` is the result of adding `digit1` and `digit2`
 - If `sum` is greater than 9(highest single digit number) then we need to restart the process
+
+The code we have generated also works for single digit numbers. No need to implement code to handle single digit numbers.
+
+```
+9 % 10 = 9
+9 / 10 = 0
+
+sum = 0 + 9 = 9
+```
+
+## Three Digit Numbers
+
+The code we generated only works for single digit numbers and two digit numbers. For three digit numbers, it doesn't work. So how do we go about summing the digits of a three digit number?
+
+For a 3-digit number like 289, we can extract the last digit `9` by finding the result of `289 % 10`. That's clear. 
+
+```go
+var digit1 int = num % 10
+```
+
+How do we extract `8` and `2`? Well, we can start by removing `9` from `289` so that it becomes `28`. 
+
+```go
+var temp int = num / 10
+```
+
+Unlike in summing 2-digit numbers, we can't use this (28) as the second digit. So we store the result in a `temp` variable. 
+
+From this `temp` variable we can extract the second and first digits, `8` and `2`. `8` is the result of `28 % 10` and `2` is the result of `28 / 10`.
+
+```go
+var digit2 int = temp % 10
+var digit3 int = temp / 10
+```
+
+Then we add all the digits to get the sum:
+```
+289 --> 2 + 8 + 9 --> 19, 19 --> 1 + 9 --> 10, 10 --> 1 + 0 --> 1
+```
+
+`289` is a special type of 3-digit number. As seen above if you sum the digits of `289` it produces `19`. If you sum `19` you get `10`. Then when you sum `10` you get `1`. This means the number of times you sum this 3-digit number to get a single digit number is 3 times. That's the most a 3-digit number can be summed. Only a few 3-digit numbers fulfil this condition. 
+
+```
+199, 919, 991
+289, 298, 829, 892, 928, 982
+379, 397, 937, 973, 739, 793
+469, 496, 946, 964, 649, 694
+559, 595, 955
+```
+
+All these 3-digit numbers have one thing in common. When their digits are summed the first result is `19`. `19` is the only number between `0` and `27` that will produce a two-digit number when summed. 
+
+`27` represents the highest possible number you can get when summing 3-digit numbers. `999` is the highest 3-digit number and it produces `27` when its individual digits are summed. That's why we can confidently make the claim. This also means that the result of adding the digits of a 3-digit number cannot be more than a 2-digit number.
+
+Some three digit numbers like `380` need to be summed twice to produce a single digit number.
+
+Then some like `320` need to be summed once to produce a single digit number.
+
+Back to our code. `sum` will store the result of summing the digits.
+
+```go
+var sum int = digit1 + digit2 + digit3
+```
+
+After getting the sum of the digits, we need to check if it is not a single digit (is `sum` greater than 9?). 
+```go
+if sum > 9
+```
+
+If `sum` is greater than 9, then we need to restart the process but on the value of `sum`. This means extracting the digits of `sum` and then adding them to update the value of `sum`. But this time we know that `sum` is the result of adding two digits (`digit1` and `digit2`) since it is a 2-digit number.
+
+```go
+digit1 = sum % 10
+digit2 = sum / 10
+sum = digit1 + digit2
+```
+
+We need to check again if this new value of `sum` is not a single digit. If it is greater than 9, we restart the process for this new value of `sum`. However, this would be the last check as we sure that the value of `sum` will be a single digit number.
+
+```go
+if sum > 9 {
+    digit1 = sum % 10
+    digit2 = sum / 10
+    sum = digit1 + digit2
+}
+```
+
+After all this we can safely return the value of `sum`:
+
+```go
+return sum
+```
+
+Update `main.go` with the following code:
+
+```go
+package main
+
+import "fmt"
+
+func addDigits(num int) int {
+    var digit1 int = num % 10
+    var temp int = num / 10
+
+    var digit2 int = temp % 10
+    var digit3 int = temp / 10
+
+    var sum int = digit1 + digit2 + digit3
+
+    if sum > 9 {
+        digit1 = sum % 10
+        digit2 = sum / 10
+        sum = digit1 + digit2
+    }
+
+    if sum > 9 {
+        digit1 = sum % 10
+        digit2 = sum / 10
+        sum = digit1 + digit2
+    }
+
+    return sum
+}
+
+func main() {
+    fmt.Println(addDigits(289))
+    fmt.Println(addDigits(38))
+    fmt.Println(addDigits(0))
+}
+```
+
+Run the code:
+```shell
+go run main.go
+```
+
+You should see the following output:
+```
+1
+2
+0
+```
+
+The code we have generated also works for single digit numbers and double digit numbers as well. No need to implement code to handle them.
